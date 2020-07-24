@@ -1,0 +1,88 @@
+
+import numpy as np
+import keyboard
+
+class get_input():
+    """A class for getting input
+    """
+    def get_input(self):
+        user_input = input("What is your guess? \n>>>")
+        try:
+            return int(user_input)
+        except:
+            print("That is not a valid integer")
+            return None
+    
+    
+class guessing_game(get_input):
+        """Number guessing game
+        """
+        def __init__(self):
+            self.random_num = np.random.randint(1, 10)
+        
+        def play_game(self):
+            self.guesses = 0
+            guess = None 
+            while guess != self.random_num:
+                guess = self.get_input()
+                self.guesses += 1
+            print(f"Cool, you were right, you guessed {guess} and the number was in fact {self.random_num}")
+            
+        
+class guessing_game_multi(guessing_game):
+    """Multiplayer number guessing game
+    """
+    def player_number(self):
+        """asks for input of number of players"""
+        return int(input("How many players are there? \n>>>"))
+        
+    def player_list(self):
+        """asks for inputs and makes a list of the players"""
+        players = self.player_number()
+        player_list = list()
+        for n in range (1, players+1):
+            player_input = input(f"Please give player {n} \n>>>")
+            player_list.append(player_input)
+        return player_list
+        
+    def loop_players(self):
+        """loops through each player so they can input their guesses
+        makes a dictionary of each player and thier number of guesses"""
+        print(self.player_list)
+        self.player_score_dict = dict()
+        for player in self.player_list():
+            print(f"\nHello {player}\nCan all other players look away now please")
+            self.play_game()
+            self.player_score_dict[player] = self.guesses
+            print("Please press the 'c' key to proceed")
+            while True:
+                try:
+                    if keyboard.is_pressed('c'):
+                        print("\n" * 80)
+                        break
+                except:
+                    print("Please press 'c'")
+        return(self.player_score_dict)
+        
+    def winner(self):
+        """figures out and announces the winner"""
+        w = 30 #number to compare number of guesses to
+        for p in self.player_score_dict:
+            if self.player_score_dict[p] < w:
+                w = self.player_score_dict[p] #new lowest number of guesses
+                person = p
+            elif self.player_score_dict[p] == w:
+                print("It's a draw!")
+                return
+        print (f"{person} is the winner with only {w} guesses")
+            
+    def play(self):
+        """play the multiplayer game"""
+        self.loop_players()
+        self.winner()
+         
+        
+            
+if __name__ == "__main__":
+    game = guessing_game_multi()
+    game.play()
