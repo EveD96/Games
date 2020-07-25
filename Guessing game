@@ -6,7 +6,7 @@ class get_input():
     """A class for getting input
     """
     def get_input(self):
-        user_input = input("What is your guess? \n>>>")
+        user_input = input("What is your guess? (between 1-10)\n>>>")
         try:
             return int(user_input)
         except:
